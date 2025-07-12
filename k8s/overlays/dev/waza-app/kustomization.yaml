@@ -1,3 +1,5 @@
 resources:
   - ../../../base/waza-app
   - ingress.yaml
+  - ../../base/waza-app/secret.yaml
+ 
