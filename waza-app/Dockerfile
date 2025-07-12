@@ -16,7 +16,8 @@ RUN npm run build
 FROM nginx:alpine
 
 # Metadata for final image
-LABEL org.opencontainers.image.source="https://github.com/kelomo2502/blog-app-gitops-deployment"
+LABEL org.opencontainers.image.source="https://github.com/kelomo2502/waza-blog-k8s-deployment-with-observability
+"
 LABEL org.opencontainers.image.maintainer="kelvinoye@gmail.com"
 LABEL org.opencontainers.image.description="Nginx container to serve blog app"
 

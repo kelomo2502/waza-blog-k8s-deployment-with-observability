@@ -1,4 +1,4 @@
-# blog-app-gitops-deploymnt
+# waza-app-gitops-deploymnt
 
 This project aims to show how a blog app developed with React Vite frontend and a Firebase backend can be deployed to kubernetes using CI CD pipelines such as `github-actions`  and `jenkins` can be deployed in conjuction with kubernetes tools like `helm charts`and `kustomize`. We would be deploying locally to `minikube` cluster and also to production using `aws eks`. We would tie all this together into gitops practice using git as our single source of truth. All of this will happen in a declarative manner in order to make sure that our current application state always matches the application desired state.
 
@@ -8,8 +8,8 @@ We shall divide the implementation of this project into the following phases:
 2. Setting up minikube environment
 3. Setting up helm chart
 4. Setting up kustomize
-5. Deploying blog-app to minikube using helm charts
-6. Deploying blog-app to minikube using kustomize base and overlays
+5. Deploying waza-app to minikube using helm charts
+6. Deploying waza-app to minikube using kustomize base and overlays
 7. Seeting up argocd
 8. Implementing gitops using argocd with git as our single source of truth
 
@@ -51,7 +51,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # Metadata for final image
-LABEL org.opencontainers.image.source="https://github.com/kelomo2502/blog-app-gitops-deployment"
+LABEL org.opencontainers.image.source="https://github.com/kelomo2502/waza-app-gitops-deployment"
 LABEL org.opencontainers.image.maintainer="kelvinoye@gmail.com"
 LABEL org.opencontainers.image.description="Nginx container to serve blog app"
 
@@ -140,9 +140,9 @@ docker-compose.yaml
 ## 🚀 How to Use
 
 ```sh
-docker build -t your-docker-username/blog-app-gitop:v1 .
+docker build -t your-docker-username/waza-app-gitop:v1 .
 docker login
-docker push your-docker-username/blog-app-gitop:v1
+docker push your-docker-username/waza-app-gitop:v1
 ```
 
 ## Step 1: Setup Docker Environment in Minikube
@@ -165,13 +165,13 @@ The above is only necessary if you want to build your docker image within miniku
 To prevent exposing credentials in the image or config maps, use Kubernetes Secrets.
 
 Create a secret for Firebase environment variables:
-`kubectl create secret generic blog-app-secrets --from-env-file=.env`
+`kubectl create secret generic waza-app-secrets --from-env-file=.env`
 
 ### To Verify the Secret
 
 ```sh
 kubectl get secrets
-kubectl describe secret blog-app-secrets
+kubectl describe secret waza-app-secrets
 ```
 
 ## Step 3: Helm Chart Deployment (Local)
@@ -179,15 +179,15 @@ kubectl describe secret blog-app-secrets
  1. Initialize Helm chart:
 
 ```bash
-mkdir -p blog-app-gitops-deployment/kubernetes/helm/blog-app/templates
-cd blog-app-gitops-deployment/kubernetes/helm/blog-app
+mkdir -p waza-app-gitops-deployment/kubernetes/helm/waza-app/templates
+cd waza-app-gitops-deployment/kubernetes/helm/waza-app
 ```
 
  2. Create Chart.yaml
 
 ```yaml
 apiVersion: v2
-name: blog-app
+name: waza-app
 description: A React Vite blog application with Firebase backend
 version: 0.1.0
 appVersion: "1.0.0"
@@ -198,7 +198,7 @@ appVersion: "1.0.0"
 ```yaml
 replicaCount: 1
 image:
-  repository: your-docker-username/blog-app
+  repository: your-docker-username/waza-app
   pullPolicy: IfNotPresent
   tag: "latest"
 service:
@@ -208,7 +208,7 @@ env:
   configMap:
     NODE_ENV: "development"
   secrets:
-    existingSecret: "blog-app-secrets"
+    existingSecret: "waza-app-secrets"
 ```
 
 4. Create templates/deployment.yaml:
@@ -217,18 +217,18 @@ env:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "blog-app.fullname" . }}
+  name: {{ include "waza-app.fullname" . }}
   labels:
-    {{- include "blog-app.labels" . | nindent 4 }}
+    {{- include "waza-app.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "blog-app.selectorLabels" . | nindent 6 }}
+      {{- include "waza-app.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "blog-app.selectorLabels" . | nindent 8 }}
+        {{- include "waza-app.selectorLabels" . | nindent 8 }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
@@ -240,7 +240,7 @@ spec:
               protocol: TCP
           envFrom:
             - configMapRef:
-                name: {{ include "blog-app.fullname" . }}-config
+                name: {{ include "waza-app.fullname" . }}-config
             - secretRef:
                 name: {{ .Values.env.secrets.existingSecret }}
 ```
@@ -251,7 +251,7 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "blog-app.fullname" . }}-config
+  name: {{ include "waza-app.fullname" . }}-config
 data:
   {{- range $key, $value := .Values.env.configMap }}
   {{ $key }}: {{ $value | quote }}
@@ -261,23 +261,23 @@ data:
 6. Create templates/_helpers.tpl:
 
 ```yaml
-{{- define "blog-app.fullname" -}}
+{{- define "waza-app.fullname" -}}
 {{- printf "%s-%s" .Release.Name .Chart.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "blog-app.labels" -}}
+{{- define "waza-app.labels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
-{{- define "blog-app.selectorLabels" -}}
+{{- define "waza-app.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 ```
 
 7. Deploy to Minikube:
-`helm install blog-app-local ./blog-app-gitops-deployment/kubernetes/helm/blog-app`
+`helm install waza-app-local ./waza-app-gitops-deployment/kubernetes/helm/waza-app`
 
 You can see the pods by running:
 `kubectl get pods`
@@ -293,27 +293,27 @@ Inside the base folder create:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: blog-app
+  name: waza-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: blog-app
+      app: waza-app
   template:
     metadata:
       labels:
-        app: blog-app
+        app: waza-app
     spec:
       containers:
-      - name: blog-app
-        image: your-docker-username/blog-app:latest
+      - name: waza-app
+        image: your-docker-username/waza-app:latest
         ports:
         - containerPort: 80
         envFrom:
         - configMapRef:
-            name: blog-app-config
+            name: waza-app-config
         - secretRef:
-            name: blog-app-secrets
+            name: waza-app-secrets
 ```
 
 2. Create service.yaml:
@@ -322,14 +322,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: blog-app
+  name: waza-app
 spec:
   type: NodePort
   ports:
   - port: 80
     targetPort: 80
   selector:
-    app: blog-app
+    app: waza-app
 ```
 
 3. Create configmap.yaml:
@@ -338,7 +338,7 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: blog-app-config
+  name: waza-app-config
 data:
   NODE_ENV: "development"
 ```
@@ -376,13 +376,13 @@ patchesStrategicMerge:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: blog-app
+  name: waza-app
 spec:
   replicas: 1
   template:
     spec:
       containers:
-      - name: blog-app
+      - name: waza-app
         resources:
           limits:
             cpu: "500m"
@@ -393,7 +393,7 @@ spec:
 ```
 
 3. Deploy with Kustomize to kubernetes:
-`kubectl apply -k blog-app-gitops-deployment/kubernetes/kustomize/overlays/dev`
+`kubectl apply -k waza-app-gitops-deployment/kubernetes/kustomize/overlays/dev`
 
 *We have successfully deployed our app to local kubernetes cluster (minikube) via both helm-charts and kustomize*
 
@@ -414,11 +414,11 @@ Since you have a $2 budget, we'll:
 
 ### step 1. Managed EKS
 
-`eksctl create cluster --name blog-app-cluster --nodegroup-name standard-workers --node-type t3.small --nodes 1 --nodes-min 1 --nodes-max 1 --region us-east-1 --managed --spot`
+`eksctl create cluster --name waza-app-cluster --nodegroup-name standard-workers --node-type t3.small --nodes 1 --nodes-min 1 --nodes-max 1 --region us-east-1 --managed --spot`
 
-### Step 2. Let's point our kubectl to the aws eks blog-app-cluster
+### Step 2. Let's point our kubectl to the aws eks waza-app-cluster
 
-`aws eks --region us-east-1 update-kubeconfig --name blog-app-cluster`
+`aws eks --region us-east-1 update-kubeconfig --name waza-app-cluster`
 
 ### step 3. We would create namespace for our production named prod
 
@@ -426,7 +426,7 @@ Since you have a $2 budget, we'll:
 
 ### step 4.Let's create secrets in our prod namespace
 
-`kubectl create secret generic blog-app-secrets-prod --from-env-file=.env -n prod`
+`kubectl create secret generic waza-app-secrets-prod --from-env-file=.env -n prod`
 
 ### step 5. Helm Deployment to EKS
 
@@ -436,7 +436,7 @@ Let's create a values.prod.yaml
 ```yaml
 replicaCount: 2
 image:
-  repository: kelomo2502/blog-app-gitops
+  repository: kelomo2502/waza-app-gitops
   pullPolicy: Always
   tag: "v1"
 service:
@@ -446,22 +446,22 @@ env:
   configMap:
     NODE_ENV: "production"
   secrets:
-    existingSecret: "blog-app-secrets-prod"
+    existingSecret: "waza-app-secrets-prod"
 ```
 
 *We would be using a loadbalancer because it less Works well for exposing apps to the internet, it's supported by all major cloud providers (EKS, GKE, AKS) and SSL termination possible. However, Every LoadBalancer costs money.Scaling many services this way is inefficient and expensive.No routing flexibility. In a proper production environment, it will be best to use an Ingeress Controller*
 
 ### Step 6. Install with helm
 
-`helm install blog-app-prod ./blog-app-gitops-deployment/kubernetes/helm/blog-app -f values-prod.yaml`
+`helm install waza-app-prod ./waza-app-gitops-deployment/kubernetes/helm/waza-app -f values-prod.yaml`
 
 - Config kubectl to use eks cluster
-`aws eks --region us-east-1 update-kubeconfig --name blog-app-cluster`
+`aws eks --region us-east-1 update-kubeconfig --name waza-app-cluster`
 
 - Create secrets for our production namespace
 
 ```bash
-kubectl create secret generic blog-app-secrets-prod \
+kubectl create secret generic waza-app-secrets-prod \
   --from-env-file=.env \
   -n prod
 
@@ -470,10 +470,10 @@ kubectl create secret generic blog-app-secrets-prod \
 - Deploy via helm to eks cluster
 
 ```bash
-helm upgrade --install blog-app-prod kubernetes/helm/blog-app \
+helm upgrade --install waza-app-prod kubernetes/helm/waza-app \
   --namespace prod \
   --create-namespace \
-  -f kubernetes/helm/blog-app/values.prod.yaml
+  -f kubernetes/helm/waza-app/values.prod.yaml
 
 ```
 

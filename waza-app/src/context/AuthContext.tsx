@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { trackMetric } from "../services/metrics"; // ✅ Import trackMetric
+import { trackMetric } from "../services/metrics";
 import { auth } from "../firebase/firebaseConfig";
 import { 
   User, 

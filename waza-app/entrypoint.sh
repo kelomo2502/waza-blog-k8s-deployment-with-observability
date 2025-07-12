@@ -26,5 +26,5 @@ exec docker run \
   --env-file .env \
   --health-cmd="wget -q --spider 127.0.0.1:8080 || exit 1" \
   --health-interval=30s \
-   kelomo2502/waza-blog-app:v1
+   kelomo2502/waza-app:v1
 
