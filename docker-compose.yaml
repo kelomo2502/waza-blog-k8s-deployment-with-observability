@@ -10,13 +10,13 @@ services:
     env_file:
       - ./blog-app/.env
     depends_on:
-      - metrics-backend
+      - metrics-app
 
-  metrics-backend:
+  metrics-app:
     build:
-      context: ./metrics-backend
-    container_name: metrics-backend
+      context: ./metrics-app
+    container_name: metrics-app
     ports:
       - "3000:3000"
     env_file:
-      - ./metrics-backend/.env
+      - ./metrics-app/.env
