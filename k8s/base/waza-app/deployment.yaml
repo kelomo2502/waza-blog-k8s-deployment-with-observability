@@ -19,6 +19,9 @@ spec:
           image: kelomo2502/waza-app:v1
           ports:
             - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: waza-app-secret
           env:
             - name: NODE_ENV
               value: "production"
