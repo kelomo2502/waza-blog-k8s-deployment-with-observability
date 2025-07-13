@@ -1,0 +1,7 @@
+resources:
+  - ingress.yaml
+
+secretGenerator:
+  - name: waza-metrics-env
+    envs:
+      - .env

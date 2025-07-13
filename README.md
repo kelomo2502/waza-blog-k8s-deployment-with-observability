@@ -12,7 +12,7 @@
 
 ```md
 waza-app/
-├── blog-app/                 # React frontend (Vite)
+├── waza-app/                 # React frontend (Vite)
 ├── metrics-app/         # Node.js metrics API
 ├── docker-compose.yaml
 ├── k8s/                     # Kubernetes manifests
