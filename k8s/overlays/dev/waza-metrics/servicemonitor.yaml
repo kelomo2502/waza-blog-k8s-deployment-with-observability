@@ -1,0 +1,19 @@
+# overlays/dev/metrics-app/servicemonitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: waza-metrics-servicemonitor
+  namespace: monitoring
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: waza-metrics
+  namespaceSelector:
+    matchNames:
+      - waza-dev
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s
