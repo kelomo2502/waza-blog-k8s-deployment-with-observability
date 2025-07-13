@@ -21,7 +21,7 @@ spec:
             - containerPort: 8080
           envFrom:
             - secretRef:
-                name: waza-app-secret
+                name: waza-env
           env:
             - name: NODE_ENV
               value: "production"

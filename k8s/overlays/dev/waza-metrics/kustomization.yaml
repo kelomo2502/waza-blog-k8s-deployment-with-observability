@@ -1,9 +1,7 @@
 resources:
   - ingress.yaml
 
-
-# overlays/dev/kustomization.yaml
 secretGenerator:
-  - name: waza-env
+  - name: waza-metrics-env
     envs:
       - .env

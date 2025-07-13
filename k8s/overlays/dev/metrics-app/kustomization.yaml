@@ -1,4 +1,0 @@
-resources:
-  - ../../../base/waza-metrics
-  - ingress.yaml
-  - ../../base/waza-metrics/secret.yaml
