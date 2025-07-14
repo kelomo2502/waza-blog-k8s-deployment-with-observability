@@ -95,3 +95,33 @@ waza-app/
 `kubectl apply -k overlays/local for local K8s testing`
 `Push → GitHub Actions → Deploy to cluster`
 `Monitor via Grafana & Prometheus`
+
+
+	
+container="node-exporter"
+endpoint="http-metrics"
+instance="192.168.49.2:9100"
+job="node-exporter"
+namespace="monitoring"
+pod="prometheus-prometheus-node-exporter-5m97t"
+service="prometheus-prometheus-node-exporter"
+1m 33.14s ago
+40ms
+up
+
+serviceMonitor/waza-dev/waza-metrics-servicemonitor/0
+
+1 / 1 up
+
+Endpoint	Labels	Last scrape	State
+http://10.244.0.34:3000/metrics
+container="waza-metrics"
+endpoint="http"
+instance="10.244.0.34:3000"
+job="waza-metrics"
+namespace="waza-dev"
+pod="waza-metrics-7d88896484-nqvt4"
+service="waza-metrics"
+1m 42.352s ago
+1ms
+up
