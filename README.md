@@ -96,32 +96,13 @@ waza-app/
 `Push → GitHub Actions → Deploy to cluster`
 `Monitor via Grafana & Prometheus`
 
+## Outputs
 
-	
-container="node-exporter"
-endpoint="http-metrics"
-instance="192.168.49.2:9100"
-job="node-exporter"
-namespace="monitoring"
-pod="prometheus-prometheus-node-exporter-5m97t"
-service="prometheus-prometheus-node-exporter"
-1m 33.14s ago
-40ms
-up
-
-serviceMonitor/waza-dev/waza-metrics-servicemonitor/0
-
-1 / 1 up
-
-Endpoint	Labels	Last scrape	State
-http://10.244.0.34:3000/metrics
-container="waza-metrics"
-endpoint="http"
-instance="10.244.0.34:3000"
-job="waza-metrics"
-namespace="waza-dev"
-pod="waza-metrics-7d88896484-nqvt4"
-service="waza-metrics"
-1m 42.352s ago
-1ms
-up
+````dsl
+cluster_name = "waza-app-eks"
+kubeconfig = {
+  "certificate" = "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJWHRqOEtmSTVWR013RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TlRBM01UUXhNekl6TkROYUZ3MHpOVEEzTVRJeE16STRORE5hTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUURCQkVCdHdrMjI3clhjeTkzd1FxN2lJWXA2cEF2RDl4MDNjSGtLejlCRkFwNE1MZlNMZ0tITTR4Z2UKVjhZdE5PaXJKNW1LK3JqTXp6eFIxTFNDZUpzQ2ltekU2R2kvYWIvS1dIUnRnZ001YzQ2SzVqMWR5V0YvS3piawp2eUkzUk5DOG1SQTBrRVZsYWNiVWN6TGtmdEdOTXhYS0NHQmJwcDNHUGt1SWVkY0dsLzVkRTNkK0Fac21EbmE2CmlzN2gyVzlLL3AzYmJhbHpKdU1zMXY0bERyekhOVWZ1VnhTbU1EamF6aE5VK1cybEJuY0t3ZjgrWjFKUExFSkUKelVra3I0ejU4RnJuT1QrWHhVaDZZRDVWYUVKVzNmM0RSZ3lEWVNoamxLem5sNmFMb1hLSC9DSjVGVFcyNnBodApGcnBTZjlQcGxSRm1mREVTajdIWUkrK2U2TUR2QWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJUYXFyMGh0SVhOb1BEK3F5YzJGVktlZG4zTXhqQVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQ2lPNk5tOWlsYQpPQ2JYc0ZxT00xaW15TTI3d1NmNXVYOHp1MXRiaUZ4VWw2eTlpQTZub1p1bytNT2V2bHNyR0JZOE5RTnRNRkNQCmt5aUl6czFlbEU4eS9kWTh2c3E4VEFOYThPdkRiY3RGbi83dUN4WFdYSlRveDBqb1cxRmp1V0pJYlFIWURHYmEKdFJnSERQdUxzN1RKZnlHN01LU2Y3a2x6QTJObzNhTk10YTl0bCtHN0thUkV5OEV3bHc4N3VmRnFJVjh1NEpxNAo2bkF3MjYrM0ZFRFpMVW1wRm0yNElnRDdCTmhmOTV2NVJ3Mmg1Z0lnVXZ2V0FTRWlWNTh4dWxETFp6QS9vUnRiClRoY1BkdUlBejlQOFV2dmphVURmcFFQOXBIcDlxeWp6dHFGSVV0MEdZVXF4Tkl0WVJnbE5IUFZFaWlSZHhIQmoKN280c0JVamk2M1V1Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+  "cluster_name" = "waza-app-eks"
+  "endpoint" = "https://B90ACC1AF136930FBCBD799306B34988.gr7.us-east-1.eks.amazonaws.com"
+}
+```
