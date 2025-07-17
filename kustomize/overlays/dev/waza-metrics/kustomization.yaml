@@ -1,5 +1,6 @@
 resources:
   - ingress.yaml
+  - servicemonitor.yaml
 
 secretGenerator:
   - name: waza-metrics-env
